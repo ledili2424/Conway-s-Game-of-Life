@@ -1,12 +1,11 @@
-import React from 'react'
-import NavBar from './NavBar'
-import GameContainer from './components/GameContainer'
+import NavBar from "./NavBar";
+import GameContainer from "./components/GameContainer";
 
 export default function Game() {
   return (
     <div>
-        <NavBar/>
-        <GameContainer />
+      <NavBar />
+      <GameContainer />
     </div>
-  )
+  );
 }

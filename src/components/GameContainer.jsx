@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Grid from "./Grid";
 
+const getRandomAliveCells = (rows, cols) => {
+  const aliveCells = [];
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const randomValue = Math.random();
+      if (randomValue < 0.05) {
+        aliveCells.push([i, j]);
+      }
+    }
+  }
+  return aliveCells;
+};
+
 export default function GameContainer() {
-  const [inputValue1, setinputValue1] = useState("");
-  const [inputValue2, setinputValue2] = useState("");
+  const [inputValue1, setinputValue1] = useState(20);
+  const [inputValue2, setinputValue2] = useState(20);
   const [rows, setRows] = useState(20);
   const [cols, setCols] = useState(20);
   const [livingCellsCount, setLivingCellsCount] = useState(0);
   const [isError, setError] = useState(false);
+  const [randomAliveCells, setRandomAliveCells] = useState(
+    getRandomAliveCells(rows, cols)
+  );
 
   function handleClickReset() {
     if (
@@ -21,6 +37,7 @@ export default function GameContainer() {
       setError(false);
       setRows(inputValue1);
       setCols(inputValue2);
+      setRandomAliveCells(getRandomAliveCells(inputValue1, inputValue2));
     }
   }
 
@@ -31,22 +48,20 @@ export default function GameContainer() {
         rows={rows}
         cols={cols}
         updateLivingCellsCount={setLivingCellsCount}
-        placeholder="Enter width (3-40)"
+        aliveCells={randomAliveCells}
       />
       <label>
         Height(3-40)
         <input
-          type="number"
           value={inputValue1}
-          onChange={(e) => setinputValue1(e.target.value)}
+          onChange={(e) => setinputValue1(+e.target.value, 10)}
         />
       </label>
       <label>
         Width(3-40)
         <input
-          type="number"
           value={inputValue2}
-          onChange={(e) => setinputValue2(e.target.value)}
+          onChange={(e) => setinputValue2(+e.target.value, 10)}
         />
       </label>
       <button onClick={handleClickReset}>Reset Game</button>
