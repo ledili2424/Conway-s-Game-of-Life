@@ -14,29 +14,37 @@ export default function Grid({
   );
   console.log(rows);
   console.log(cols);
+  console.log(grid);
 
-  useEffect(() => {
-    console.log(rows + "insdie");
-    console.log(cols + "isd");
-    const newGrid = Array.from(Array(rows), () => new Array(cols).fill(0));
-    console.log(newGrid);
+  useEffect(
+    function () {
+      const newGrid = Array.from({ length: rows }, () =>
+        new Array(cols).fill(0)
+      );
 
-    if (randomAliveCells && randomAliveCells.length > 0) {
-      for (let i = 0; i < randomAliveCells.length; i++) {
-        const [row, col] = randomAliveCells[i];
-        if (row >= 0 && row < rows && col >= 0 && col < cols) {
-          newGrid[row][col] = 1;
+      if (randomAliveCells && randomAliveCells.length > 0) {
+        for (let i = 0; i < randomAliveCells.length; i++) {
+          const [row, col] = randomAliveCells[i];
+          if (row >= 0 && row < rows && col >= 0 && col < cols) {
+            newGrid[row][col] = 1;
+          }
         }
       }
-
       setGrid(newGrid);
+    },
+    [randomAliveCells, rows, cols]
+  );
 
-      const count = randomAliveCells.length;
-      updateLivingCellsCount(count);
-    }
-  }, [rows, cols, updateLivingCellsCount, randomAliveCells, grid]);
+  function toggleCellState(row, col) {
+    const newGrid = [...grid];
+    newGrid[row][col] = 1 - newGrid[row][col]; 
+    setGrid(newGrid);
 
-  function toggleCellState() {}
+    const livingCellsCount = newGrid
+      .flat()
+      .reduce((count, cell) => count + cell, 0);
+    updateLivingCellsCount(livingCellsCount);
+  }
 
   return (
     <div
@@ -50,8 +58,8 @@ export default function Grid({
         Array.from({ length: cols }, (_, colIndex) => (
           <Cell
             key={`${rowIndex}-${colIndex}`}
-            isAlive={true}
-            onClick={toggleCellState}
+            isAlive={grid[rowIndex][colIndex] === 1}
+            onClick={() => toggleCellState(rowIndex, colIndex)}
           />
         ))
       )}

@@ -8,7 +8,7 @@ export default function Cell({ isAlive, onClick }) {
         width: "20px",
         height: "20px",
         border: "1px solid #ccc",
-        backgroundColor: "black",
+        backgroundColor: isAlive ? "black" : "white",
       }}
     ></div>
   );

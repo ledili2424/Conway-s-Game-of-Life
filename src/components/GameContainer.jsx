@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Grid from "./Grid";
 
 const getRandomAliveCells = (rows, cols) => {
@@ -41,6 +41,14 @@ export default function GameContainer() {
     }
   }
 
+  useEffect(
+    function () {
+      const count = randomAliveCells.length;
+      setLivingCellsCount(count);
+    },
+    [randomAliveCells]
+  );
+
   return (
     <div>
       <p>Count Living Cells:{livingCellsCount}</p>
@@ -48,7 +56,7 @@ export default function GameContainer() {
         rows={rows}
         cols={cols}
         updateLivingCellsCount={setLivingCellsCount}
-        aliveCells={randomAliveCells}
+        randomAliveCells={randomAliveCells}
       />
       <label>
         Height(3-40)
