@@ -55,7 +55,7 @@ export default function GameContainer() {
       <Grid
         rows={rows}
         cols={cols}
-        updateLivingCellsCount={setLivingCellsCount}
+        setLivingCellsCount={setLivingCellsCount}
         randomAliveCells={randomAliveCells}
       />
       <label>
@@ -73,7 +73,7 @@ export default function GameContainer() {
         />
       </label>
       <button onClick={handleClickReset}>Reset Game</button>
-      {isError && <p>Invalid height/width!</p>}
+      {isError && <p>Invalid height/width!(should be between 3 and 40)</p>}
     </div>
   );
 }

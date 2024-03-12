@@ -6,21 +6,19 @@ import "./Grid.css";
 export default function Grid({
   rows,
   cols,
-  updateLivingCellsCount,
+  setLivingCellsCount,
   randomAliveCells,
 }) {
   const [grid, setGrid] = useState(
     Array.from(Array(rows), () => new Array(cols).fill(0))
   );
-  console.log(rows);
-  console.log(cols);
-  console.log(grid);
+  // console.log(rows);
+  // console.log(cols);
+  // console.log(grid);
 
   useEffect(
     function () {
-      const newGrid = Array.from({ length: rows }, () =>
-        new Array(cols).fill(0)
-      );
+      const newGrid = Array.from(Array(rows), () => new Array(cols).fill(0));
 
       if (randomAliveCells && randomAliveCells.length > 0) {
         for (let i = 0; i < randomAliveCells.length; i++) {
@@ -35,42 +33,98 @@ export default function Grid({
     [randomAliveCells, rows, cols]
   );
 
+  const updatelivingCellsCount = function (newGrid) {
+    return newGrid
+      .flat()
+      .reduce((count, cellIsAlive) => count + cellIsAlive, 0);
+  };
+
   function toggleCellState(row, col) {
     const newGrid = [...grid];
-    newGrid[row][col] = 1 - newGrid[row][col]; 
+    newGrid[row][col] = 1 - newGrid[row][col];
     setGrid(newGrid);
 
-    const livingCellsCount = newGrid
-      .flat()
-      .reduce((count, cell) => count + cell, 0);
-    updateLivingCellsCount(livingCellsCount);
+    setLivingCellsCount(updatelivingCellsCount(newGrid));
   }
 
+  function handleClickNext() {
+    const nextGrid = Array.from({ length: rows }, (r, rowIndex) =>
+      Array.from({ length: cols }, (c, colIndex) => {
+        return calculateNext(rowIndex, colIndex);
+      })
+    );
+    setGrid(nextGrid);
+    setLivingCellsCount(updatelivingCellsCount(nextGrid));
+  }
+
+  const calculateNext = function (row, col) {
+    const currentCellState = grid[row][col];
+    const neighbors = getNeighbors(row, col);
+    const livingNeighbors = neighbors.reduce(
+      (count, [neiRow, neiCol]) => count + grid[neiRow][neiCol],
+      0
+    );
+
+    if (currentCellState === 1) {
+      if (livingNeighbors === 2 || livingNeighbors === 3) return 1;
+      else return 0;
+    } else {
+      if (livingNeighbors === 3) return 1;
+      else return 0;
+    }
+  };
+
+  const getNeighbors = function (row, col) {
+    const neightbors = [];
+    const directions = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+      [-1, 1],
+      [1, 1],
+      [-1, -1],
+      [1, -1],
+    ];
+    for (let dir of directions) {
+      neightbors.push([row + dir[0], col + dir[1]]);
+    }
+    return neightbors.filter(
+      ([neiRow, neiCol]) =>
+        neiRow >= 0 && neiRow < rows && neiCol >= 0 && neiCol < cols
+    );
+  };
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${cols}, 20px)`,
-        gridTemplateRows: `repeat(${rows}, 20px)`,
-      }}
-    >
-      {Array.from({ length: rows }, (_, rowIndex) =>
-        Array.from({ length: cols }, (_, colIndex) => (
-          <Cell
-            key={`${rowIndex}-${colIndex}`}
-            isAlive={grid[rowIndex][colIndex] === 1}
-            onClick={() => toggleCellState(rowIndex, colIndex)}
-          />
-        ))
-      )}
-    </div>
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${cols}, 20px)`,
+          gridTemplateRows: `repeat(${rows}, 20px)`,
+        }}
+      >
+        {Array.from({ length: rows }, (r, rowIndex) =>
+          Array.from({ length: cols }, (c, colIndex) => (
+            <Cell
+              key={`${rowIndex}-${colIndex}`}
+              onClick={() => toggleCellState(rowIndex, colIndex)}
+              grid={grid}
+              row={rowIndex}
+              col={colIndex}
+            />
+          ))
+        )}
+      </div>
+      <button onClick={handleClickNext}>Next</button>
+    </>
   );
 }
 
 Grid.propTypes = {
   rows: PropTypes.number.isRequired,
   cols: PropTypes.number.isRequired,
-  updateLivingCellsCount: PropTypes.func.isRequired,
+  setLivingCellsCount: PropTypes.func.isRequired,
   randomAliveCells: PropTypes.arrayOf(
     PropTypes.arrayOf(PropTypes.number.isRequired)
   ),
