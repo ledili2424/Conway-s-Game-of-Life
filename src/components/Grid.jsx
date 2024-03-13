@@ -96,7 +96,7 @@ export default function Grid({
   };
 
   return (
-    <>
+    <div className="grid">
       <div
         style={{
           display: "grid",
@@ -115,8 +115,8 @@ export default function Grid({
           ))
         )}
       </div>
-      <button onClick={handleClickNext}>Next</button>
-    </>
+      <button onClick={handleClickNext} className="next-button">Next</button>
+    </div>
   );
 }
 

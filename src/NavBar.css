@@ -1,0 +1,25 @@
+.navbar {
+  overflow: hidden;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.navbar .nav-link {
+  display: block;
+  color: black;
+  padding: 14px 16px;
+  text-decoration: none;
+  margin-inline: 30px;
+}
+
+.navbar .nav-link:hover {
+  background-color: #ddd;
+  color: grey;
+}

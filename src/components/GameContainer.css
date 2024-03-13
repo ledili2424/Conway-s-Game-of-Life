@@ -1,0 +1,17 @@
+.game-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputs {
+  margin: 30px;
+}
+
+.height {
+  margin-right: 15px;
+}
+
+.width {
+  margin-left: 15px;
+}

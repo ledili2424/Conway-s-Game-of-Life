@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Grid from "./Grid";
+import "./GameContainer.css";
 
 const getRandomAliveCells = (rows, cols) => {
   const aliveCells = [];
@@ -50,28 +51,30 @@ export default function GameContainer() {
   );
 
   return (
-    <div>
-      <p>Count Living Cells:{livingCellsCount}</p>
+    <div className="game-container">
+      <p>Count Living Cells: {livingCellsCount}</p>
       <Grid
         rows={rows}
         cols={cols}
         setLivingCellsCount={setLivingCellsCount}
         randomAliveCells={randomAliveCells}
       />
-      <label>
-        Height(3-40)
-        <input
-          value={inputValue1}
-          onChange={(e) => setinputValue1(+e.target.value, 10)}
-        />
-      </label>
-      <label>
-        Width(3-40)
-        <input
-          value={inputValue2}
-          onChange={(e) => setinputValue2(+e.target.value, 10)}
-        />
-      </label>
+      <div className="inputs">
+        <label className="height">
+          Height(3-40)
+          <input
+            value={inputValue1}
+            onChange={(e) => setinputValue1(+e.target.value, 10)}
+          />
+        </label>
+        <label className="width">
+          Width(3-40)
+          <input
+            value={inputValue2}
+            onChange={(e) => setinputValue2(+e.target.value, 10)}
+          />
+        </label>
+      </div>
       <button onClick={handleClickReset}>Reset Game</button>
       {isError && <p>Invalid height/width!(should be between 3 and 40)</p>}
     </div>
