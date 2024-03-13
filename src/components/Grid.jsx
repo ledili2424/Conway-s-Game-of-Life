@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import Cell from "./Cell";
 import "./Grid.css";
+import { GridContext } from "./GridContext";
 
 export default function Grid({
   rows,
@@ -43,7 +44,6 @@ export default function Grid({
     const newGrid = [...grid];
     newGrid[row][col] = 1 - newGrid[row][col];
     setGrid(newGrid);
-
     setLivingCellsCount(updatelivingCellsCount(newGrid));
   }
 
@@ -106,13 +106,12 @@ export default function Grid({
       >
         {Array.from({ length: rows }, (r, rowIndex) =>
           Array.from({ length: cols }, (c, colIndex) => (
-            <Cell
+            <GridContext.Provider
+              value={{ grid, rowIndex, colIndex }}
               key={`${rowIndex}-${colIndex}`}
-              onClick={() => toggleCellState(rowIndex, colIndex)}
-              grid={grid}
-              row={rowIndex}
-              col={colIndex}
-            />
+            >
+              <Cell onClick={() => toggleCellState(rowIndex, colIndex)} />
+            </GridContext.Provider>
           ))
         )}
       </div>

@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { GridContext } from "./GridContext";
 
-export default function Cell({ onClick, grid, row, col }) {
+export default function Cell({ onClick }) {
+  const { grid, rowIndex: row, colIndex: col } = useContext(GridContext);
+  
   const isValidCell =
     row >= 0 && row < grid.length && col >= 0 && col < grid[0].length;
 
