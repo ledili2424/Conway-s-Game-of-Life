@@ -63,6 +63,7 @@ export default function GameContainer() {
         <label className="height">
           Height(3-40)
           <input
+            className="input"
             value={inputValue1}
             onChange={(e) => setinputValue1(+e.target.value, 10)}
           />
@@ -70,6 +71,7 @@ export default function GameContainer() {
         <label className="width">
           Width(3-40)
           <input
+            className="input"
             value={inputValue2}
             onChange={(e) => setinputValue2(+e.target.value, 10)}
           />
